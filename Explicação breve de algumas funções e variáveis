@@ -1,5 +1,5 @@
 
-Tudo começa na função main. Aqui, várias variáveis são inicializadas para controlar o jogador, inimigos, fases, vida e o próprio mapa do jogo, que é uma matriz de até 40x40 espaços. O menu inicial é exibido, permitindo ao jogador começar uma nova partida, ver os créditos ou sair do jogo.
+Tudo começa na função main. Aqui, várias variáveis são inicializadas para controlar o jogador, inimigos, fases, vida e o próprio mapa do jogo, que é uma matriz de até X x Y espaços. O menu inicial é exibido, permitindo ao jogador começar uma nova partida, ver os créditos ou sair do jogo.
 
 O fluxo principal do jogo acontece em loops: enquanto o jogo estiver ativo, o programa recebe comandos do jogador para movimentação e interação, atualiza o estado dos inimigos e do mapa, verifica colisões e decide se o jogador prossegue para a próxima fase, perde uma vida ou encerra a aventura.
 
