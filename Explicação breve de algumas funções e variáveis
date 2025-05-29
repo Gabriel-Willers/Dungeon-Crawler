@@ -1,5 +1,5 @@
 
-Função Principa/Função main. Aqui, várias variáveis são inicializadas para definir os status inicial do jogador, posição dos inimigos, 
+Função Principal/Função main. Aqui, várias variáveis são inicializadas para definir os status inicial do jogador, posição dos inimigos, 
 fases e o próprio mapa do jogo, que é uma única matriz de 40 por 40. A interação do usuário com o programa ocorre na
 função main, e é aqui que as principais funções são chamadas para executar e responder o usuário.
 
@@ -10,38 +10,38 @@ e reiniciando posições do jogador e das características do mapa.
 
 As Principais Variáveis:
 
-- **Mapa[][]:** É a matriz que representa o cenário do jogo em cada fase. Nela, cada caractere simboliza um elemento: 
-                parede, espinho, porta, chave, inimigo, etc.
-- **JogX, JogY:** Coordenadas do jogador dentro do mapa.
-- **IX1, IY1, IX2, IY2:** Coordenadas dos dois principais inimigos (X e V), que se movimentam de maneiras diferentes.
-- **Vida:** Número de vidas do jogador, que começa com três e vai diminuindo a cada colisão com espinhos ou inimigos.
-- **Onda:** Indica a fase atual do jogo. Conforme avança, o cenário muda e os desafios aumentam.
-- **Proxima, MudarMapa, Zerar:** Variáveis de controle que determinam quando mudar de fase ou reiniciar o jogo.
+- Mapa[][]:** É a matriz que representa o cenário do jogo em cada fase. Nela, cada caractere simboliza um elemento: 
+              parede, espinho, porta, chave, inimigo, etc.
+- JogX, JogY: Coordenadas do jogador dentro do mapa.
+- IX1, IY1, IX2, IY2: Coordenadas dos dois principais inimigos (X e V), que se movimentam de maneiras diferentes.
+- Vida: Número de vidas do jogador, que começa com três e vai diminuindo a cada colisão com espinhos ou inimigos.
+- Onda: Indica a fase atual do jogo. Conforme avança, o cenário muda e os desafios aumentam.
+- Proxima, MudarMapa, Zerar: Variáveis de controle que determinam quando mudar de fase ou reiniciar o jogo.
 
  Principais Funções:
 
-- **TelaInicial:** Exibe o menu e lê a escolha do jogador. Dependendo da opção, pode iniciar o jogo, mostrar os créditos ou encerrar o programa.
+- TelaInicial: Exibe o menu e lê a escolha do jogador. Dependendo da opção, pode iniciar o jogo, mostrar os créditos ou encerrar o programa.
 
  Montagem do Cenário
 
-- **Fase:** Define o tamanho do mapa de acordo com a fase atual.
-- **Estrutura:** Constrói paredes, espinhos, portas, NPCs e outros elementos no mapa, alterando a matriz do cenário 
-    de acordo com o tipo de objeto. Não é usada na função main, ela é chamada na função "MapaGerador", que por sua vez
-    é chamada na função "Jogo", aonde a matriz é imprimida.
-- **MapaGerador:** Usa a função Estrutura para montar o mapa completo de cada fase, colocando os elementos nos 
-    lugares corretos a partir do valor de suas coordenadas, entao se você quer tantas paredes em tal área, 
-    colocamos 1 e 5 na região X, por exemplo, daí a função aplica essas paredes do ponto X=1 até o X=5.
+- Fase: Define o tamanho do mapa de acordo com a fase atual.
+- Estrutura: Constrói paredes, espinhos, portas, NPCs e outros elementos no mapa, alterando a matriz do cenário 
+  de acordo com o tipo de objeto. Não é usada na função main, ela é chamada na função "MapaGerador", que por sua vez
+  é chamada na função "Jogo", aonde a matriz é imprimida.
+- MapaGerador: Usa a função Estrutura para montar o mapa completo de cada fase, colocando os elementos nos 
+  lugares corretos a partir do valor de suas coordenadas, entao se você quer tantas paredes em tal área, 
+  colocamos 1 e 5 na região X, por exemplo, daí a função aplica essas paredes do ponto X=1 até o X=5.
 
 ### Jogabilidade
 
-- **Jogador:** Processa as ações do jogador (movimentação com W, A, S, D e interação com "i"), verifica se ele 
-               pode se mover para a próxima posição dependendo do objeto a frente, se tivermos um "*" ele não 
-               poderá passar por ele. Permite interações com portas, NPCs, chaves ou outros itens especiais. 
-               Também lida com teletransportes.
-- **Inimigos:** Controla o movimento e limitações espaciais dos inimigos. O "X" se move aleatoriamente, 
-                enquanto o "V" persegue o jogador de forma inteligente nas fases avançadas.
-- **Colisao:** Checa se o jogador encostou em um inimigo ou espinho. Se sim, perde uma vida.
-- **Jogo:** Atualiza e exibe o mapa do jogo a cada rodada, mostrando a posição do jogador, dos inimigos e de todos os elementos do cenário.
+- Jogador: Processa as ações do jogador (movimentação com W, A, S, D e interação com "i"), verifica se ele 
+             pode se mover para a próxima posição dependendo do objeto a frente, se tivermos um "*" ele não 
+             poderá passar por ele. Permite interações com portas, NPCs, chaves ou outros itens especiais. 
+             Também lida com teletransportes.
+- Inimigos: Controla o movimento e limitações espaciais dos inimigos. O "X" se move aleatoriamente, 
+              enquanto o "V" persegue o jogador de forma inteligente nas fases avançadas.
+- Colisao: Checa se o jogador encostou em um inimigo ou espinho. Se sim, perde uma vida.
+- Jogo: Atualiza e exibe o mapa do jogo a cada rodada, mostrando a posição do jogador, dos inimigos e de todos os elementos do cenário.
 
 ### Encerramento e Transições
 
