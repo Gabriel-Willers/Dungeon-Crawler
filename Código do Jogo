@@ -1,0 +1,421 @@
+#include <time.h>
+#include <stdio.h>
+#include <conio.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <windows.h>
+
+void TelaInicial(int *Inicializador, int *Menu){
+	int Loop = 0;
+	while(Loop == 0){
+	    printf("\tDungeon Crawler\n\n"
+		       "[1]Iniciar jogo\n"
+			   "[2]Créditos\n"
+			   "[3]Sair do jogo\n");
+			   
+			   char Escolha;
+			   int Valor = 0;
+			   Escolha = getch();
+			   fflush(stdin);
+			   system("cls");
+			   
+			   if(Escolha == '1'){Valor = 1;}
+			   if(Escolha == '2'){Valor = 2;}
+               if(Escolha == '3'){Valor = 3;}	
+			   
+			   switch(Valor){
+				   case 1:
+				   	(*Inicializador) = 1;
+				   	Loop = 1;
+				   	break;
+				   case 2:
+				   	printf("          ***Créditos***\n\n"
+					       "***Juan Pablo dos Santos Correa***\n"
+						   "  ***Gabriel Willers Teixeira***\n");
+						   getch();
+						   fflush(stdin);
+						   system("cls");
+						   break;
+				   case 3:
+				   	(*Menu) = 0;
+				   	Loop = 1;	   
+			   }
+			
+	}   
+}
+
+void Fase(int *Valor, int *Largura, int *Altura){
+	int Onda = (*Valor);
+	if(Onda == 1){Onda = 2;}
+	(*Largura) = ((Onda)*10)/2;
+	(*Altura) = (*Largura);
+}
+
+void Jogador(char Tecla, int *JogX, int *JogY, int PaX, 
+int PaY, char Mapa[][40], int *PortaX, int *PortaY, 
+int *Proxima, int *NPCX, int *EspinhoX, int *EspinhoY, int *EspinhoAtivar){
+	if((Tecla == 'w') && (Mapa[(*JogY)-1][(*JogX)] != '*'&&
+	Mapa[(*JogY)-1][(*JogX)] != 'D'&&Mapa[(*JogY)-1][(*JogX)] != 'P')){(*JogY)--;};
+	if((Tecla == 'a') && (Mapa[(*JogY)][(*JogX)-1] != '*'&&
+	Mapa[(*JogY)][(*JogX)-1] != 'D'&&Mapa[(*JogY)][(*JogX)-1] != 'P')){(*JogX)--;};
+	if((Tecla == 's') && (Mapa[(*JogY)+1][(*JogX)] != '*'&&
+	Mapa[(*JogY)+1][(*JogX)] != 'D'&&Mapa[(*JogY)+1][(*JogX)] != 'P')){(*JogY)++;};
+	if((Tecla == 'd') && (Mapa[(*JogY)][(*JogX)+1] != '*'&&
+	Mapa[(*JogY)][(*JogX)+1] != 'D'&&Mapa[(*JogY)][(*JogX)+1] != 'P')){(*JogX)++;};
+
+    if(Mapa[(*JogY)][(*JogX)] == '>'){(*JogY) =  3; (*JogX) = 27;}
+    if(Mapa[(*JogY)][(*JogX)] == '<'){(*JogY) = 28; (*JogX) = 32;}	
+
+	if((Tecla == 'i')&&(Mapa[(*JogY)-1][(*JogX)]=='P'||Mapa[(*JogY)][(*JogX)-1]=='P'||
+	Mapa[(*JogY)+1][(*JogX)]=='P'||Mapa[(*JogY)][(*JogX)+1]=='P')){
+		if((*PortaX) == 5 && (*PortaY) == 6){
+        printf("Olá! Sou o aldeão.");
+		getch();
+		printf("\r");
+	    printf("\033[2k");
+	    printf("Irei lhe ajudar a escapar da dungeon com vida.");
+		getch();
+		printf("\r");
+	    printf("\033[2k");
+	    printf("Há muitos perigos por aqui, então preste atenção!");
+		getch();
+		printf("\r");
+	    printf("\033[2k");
+	    printf("Para fugir e se esconder, se mova por W, A, S e D.");
+		getch();
+		printf("\r");
+	    printf("\033[2k");
+		printf("Em cada mapa você deverá encontrar a chave '@' que abrirá a porta 'D'");
+		getch();
+		printf("\r");
+	    printf("\033[2k");
+	    printf("Quando você encontrar a chave '@' fique em cima dela e aperte a tecla 'i'");
+	    getch();
+		printf("\r");
+	    printf("\033[2k");
+	    printf("Tente com essa que está à minha esquerda que abrirá a porta bem atras de mim");
+	    getch();
+		}else if((*PortaX) == 9 && (*PortaY) == 10){
+			printf("Isso. Agora é só passar pela porta '='");
+			getch();
+		    printf("\r");
+	        printf("\033[2k");
+	        printf("Tenha bastante cuidado com espinhos '#' e monstros 'X' 'V'!");
+	        getch();
+		    printf("\r");
+	        printf("\033[2k");
+	        printf("Existem botões 'O' que funcionam da mesma forma que a chave");
+	        getch();
+		    printf("\r");
+	        printf("\033[2k");
+	        printf("que desativam os espinhos. E os '<' '>' são teletransportes.");
+	        getch();
+		    printf("\r");
+	        printf("\033[2k");
+	        printf("Use-os para ir de um lugar para o outro nas salas. Boa Sorte!");
+	        
+	        (*NPCX) = 5;   
+	        if((*JogX) == 5 && (*JogY) == 1){
+				(*NPCX) = 7;
+			}
+	        getch();
+		}
+	}
+	
+	if((Tecla == 'i') && Mapa[(*JogY)][(*JogX)]=='@'){
+		(*PortaX) =  9;
+		(*PortaY) = 10;
+	}
+	
+	if((Tecla == 'i') && Mapa[(*JogY)][(*JogX)]=='O'){
+		(*EspinhoX) = 0;
+		(*EspinhoY) = 0;
+		(*EspinhoAtivar) = 4;
+	}
+	
+	if(Mapa[(*JogY)][(*JogX)]=='='){(*Proxima)=1;}		
+}
+
+void Estrutura(int Objeto, int PontoFixo, int Ponto1, int Ponto2, char Mapa[][40]){
+	switch(Objeto){
+	    case 1://Parede eixo X
+	    	for(Ponto1 = Ponto1; Ponto1 <= Ponto2; Ponto1++){
+				Mapa[PontoFixo][Ponto1] = '*';
+			}
+			break;
+		case 2://Parede eixo Y
+			for(Ponto1 = Ponto1; Ponto1 <= Ponto2; Ponto1++){
+				Mapa[Ponto1][PontoFixo] = '*';
+			}
+			break;
+		case 3://Espinho eixo X
+			for(Ponto1 = Ponto1; Ponto1 <= Ponto2; Ponto1++){
+				Mapa[PontoFixo][Ponto1] = '#';
+			}
+			break;
+		case 4://Espinho eixo Y
+			for(Ponto1 = Ponto1; Ponto1 <= Ponto2; Ponto1++){
+				Mapa[Ponto1][PontoFixo] = '#';
+			}
+			break;
+		case 5://Porta eixo X
+			for(Ponto1 = Ponto1; Ponto1 <= Ponto2; Ponto1++){
+				Mapa[PontoFixo][Ponto1] = 'D';
+			}
+			break; 
+		case 6://Porta eixo Y
+			for(Ponto1 = Ponto1; Ponto1 <= Ponto2; Ponto1++){
+				Mapa[Ponto1][PontoFixo] = 'D';
+			}
+			break;
+		case 7:
+			Mapa[Ponto1][Ponto2] = 'P';
+			break;
+		case 8:
+			Mapa[Ponto1][Ponto2] = '@';
+			break;
+		case 9://Porta eixo X
+			for(Ponto1 = Ponto1; Ponto1 <= Ponto2; Ponto1++){
+				Mapa[PontoFixo][Ponto1] = '=';
+			}
+			break;
+		case 10://Porta eixo Y
+				for(Ponto1 = Ponto1; Ponto1 <= Ponto2; Ponto1++){
+				Mapa[Ponto1][PontoFixo] = '=';
+			}
+			break;
+		case 11://Portal 1
+			Mapa[Ponto1][Ponto2] = '>';
+			break;
+		case 12://Portal 2 
+			Mapa[Ponto1][Ponto2] = '<';
+			break;
+		case 13:
+			Mapa[Ponto1][Ponto2] = 'O';
+			break;
+	}
+}
+
+void MapaGerador(int Fase, char Mapa[][40], int PortaX, int PortaY, int NPCX,
+int EspinhoX, int EspinhoY, int EspinhoAtivar){
+	if(Fase == 1){
+		Estrutura(1,0,0,9,Mapa);Estrutura(1,9,0,9,Mapa);
+		Estrutura(2,0,0,9,Mapa);Estrutura(2,9,0,9,Mapa);
+		Estrutura(7,0,1,NPCX,Mapa);
+		Estrutura(PortaX,0,6,6,Mapa);Estrutura(8,0,1,1,Mapa);
+	}else if(Fase == 2){
+		Estrutura(1,0,0,9,Mapa);Estrutura(1,9,0,9,Mapa);
+		Estrutura(2,0,0,9,Mapa);Estrutura(2,9,0,9,Mapa);
+		Estrutura(PortaY,9,1,3,Mapa);Estrutura(8,0,8,2,Mapa);
+		Estrutura(1,7,5,7,Mapa);Estrutura(2,5,2,8,Mapa);
+		Estrutura(1,4,7,8,Mapa);Estrutura(2,2,2,6,Mapa);
+		Estrutura(1,6,1,2,Mapa);
+	}else if(Fase == 4){
+		Estrutura(1,0,0,19,Mapa);Estrutura(1,19,0,19,Mapa);
+		Estrutura(2,0,0,19,Mapa);Estrutura(2,19,0,19,Mapa);
+		Estrutura(PortaX,19,8,10,Mapa);Estrutura(8,0,3,15,Mapa);
+		Estrutura(2,2,12,17,Mapa);Estrutura(2,17,2,14,Mapa);
+		Estrutura(2,7,2,7,Mapa);Estrutura(1,4,13,17,Mapa);
+		Estrutura(2,7,9,19,Mapa);Estrutura(1,7,1,7,Mapa);
+		Estrutura(2,11,16,19,Mapa);Estrutura(1,12,2,7,Mapa);
+		Estrutura(2,13,1,4,Mapa);Estrutura(1,16,11,17,Mapa);
+		Estrutura(EspinhoX,16,8,10,Mapa);Estrutura(EspinhoX,1,17,17,Mapa);
+		Estrutura(13,0,14,5,Mapa);
+	}else if(Fase == 8){
+		Estrutura(1,0,0,39,Mapa);Estrutura(1,39,0,39,Mapa);
+		Estrutura(2,0,0,39,Mapa);Estrutura(2,39,0,39,Mapa);
+		Estrutura(PortaY,0,36,38,Mapa);Estrutura(11,0,28,31,Mapa);//28/32
+		Estrutura(2,17,4,23,Mapa);Estrutura(1,2,31,35,Mapa);
+		Estrutura(2,17,26,35,Mapa);Estrutura(1,35,1,5,Mapa);
+		Estrutura(2,25,1,4,Mapa);Estrutura(1,26,17,34,Mapa);
+		Estrutura(2,26,29,37,Mapa);Estrutura(1,4,26,31,Mapa);
+		Estrutura(2,31,2,4,Mapa);Estrutura(1,29,26,34,Mapa);
+		Estrutura(EspinhoY,5,36,38,Mapa);Estrutura(EspinhoX,26,35,38,Mapa);
+		Estrutura(EspinhoX,4,18,24,Mapa);Estrutura(EspinhoX,29,35,38,Mapa);
+		Estrutura(EspinhoAtivar,17,36,38,Mapa);Estrutura(EspinhoAtivar,17,24,25,Mapa);
+		Estrutura(3,2,36,38,Mapa);Estrutura(13,0,32,31,Mapa);
+		Estrutura(8,0,1,38,Mapa);Estrutura(12,0,3,28,Mapa);//3/27
+	}
+}
+
+void Inimigos(int Fase, int *IX1, int *IY1, int *IX2, int *IY2,
+ int JogX, int JogY, int PaX, int PaY, char Mapa[][40]){
+	srand(time(NULL));
+	int movimentacao = rand() % 4;
+	
+	if(Fase > 2){
+		if(movimentacao == 0 && (Mapa[(*IY1)-1][(*IX1)] != '*' && Mapa[(*IY1)-1][(*IX1)] != '#')){(*IY1)--;}
+        if(movimentacao == 1 && (Mapa[(*IY1)][(*IX1)-1] != '*' && Mapa[(*IY1)][(*IX1)-1] != '#')){(*IX1)--;}
+        if(movimentacao == 2 && (Mapa[(*IY1)+1][(*IX1)] != '*' && Mapa[(*IY1)+1][(*IX1)] != '#')){(*IY1)++;}
+		if(movimentacao == 3 && (Mapa[(*IY1)][(*IX1)+1] != '*' && Mapa[(*IY1)][(*IX1)+1] != '#')){(*IX1)++;}
+		
+	}
+
+    if(Fase > 4){
+		if(JogX - (*IX2) < 0 && JogY - (*IY2) < 0){
+			if(Mapa[(*IY2)][(*IX2)-1] != '*' && Mapa[(*IY2)][(*IX2)-1] != '#'){(*IX2)--;}
+			if(Mapa[(*IY2)-1][(*IX2)] != '*' && Mapa[(*IY2)-1][(*IX2)] != '#'){(*IY2)--;}
+		}
+		if(JogX - (*IX2) < 0 && JogY - (*IY2) > 0){
+			if(Mapa[(*IY2)][(*IX2)-1] != '*' && Mapa[(*IY2)][(*IX2)-1] != '#'){(*IX2)--;}
+			if(Mapa[(*IY2)+1][(*IX2)] != '*' && Mapa[(*IY2)+1][(*IX2)] != '#'){(*IY2)++;}
+		}
+		if(JogX - (*IX2) > 0 && JogY - (*IY2) > 0){
+			if(Mapa[(*IY2)][(*IX2)+1] != '*' && Mapa[(*IY2)][(*IX2)+1] != '#'){(*IX2)++;}
+			if(Mapa[(*IY2)+1][(*IX2)] != '*' && Mapa[(*IY2)+1][(*IX2)] != '#'){(*IY2)++;}
+		}
+		if(JogX - (*IX2) > 0 && JogY - (*IY2) < 0){
+			if(Mapa[(*IY2)][(*IX2)+1] != '*' && Mapa[(*IY2)][(*IX2)+1] != '#'){(*IX2)++;}
+			if(Mapa[(*IY2)-1][(*IX2)] != '*' && Mapa[(*IY2)-1][(*IX2)] != '#'){(*IY2)--;}
+		}
+		if(JogX - (*IX2) == 0 && JogY - (*IY2) < 0){
+			if(Mapa[(*IY2)-1][(*IX2)] != '*' && Mapa[(*IY2)-1][(*IX2)] != '#'){(*IY2)--;}
+		}
+		if(JogX - (*IX2) < 0 && JogY - (*IY2) == 0){
+			if(Mapa[(*IY2)][(*IX2)-1] != '*' && Mapa[(*IY2)][(*IX2)-1] != '#'){(*IX2)--;}
+		}
+		if(JogX - (*IX2) == 0 && JogY - (*IY2) > 0){
+			if(Mapa[(*IY2)][(*IX2)+1] != '*' && Mapa[(*IY2)][(*IX2)+1] != '#'){(*IX2)++;}
+		}
+		if(JogX - (*IX2) > 0 && JogY - (*IY2) == 0){
+		    if(Mapa[(*IY2)+1][(*IX2)] != '*' && Mapa[(*IY2)+1][(*IX2)] != '#'){(*IY2)++;}
+		}							
+		
+	}
+}
+
+void Colisao(int *Vida, int JogX, int JogY, int IX1,
+ int IY1, int IX2, int IY2, char Mapa[][40]){
+	if((JogX == IX1 && JogY == IY1)||(JogX  == IX2 &&
+	 JogY == IY2)||(Mapa[JogY][JogX] == '#')){
+		(*Vida)--;
+	}	
+}
+
+void Jogo(int Altura, int Largura,int IX1, int IY1, int IX2,
+ int IY2, int JogX, int JogY, int *Fase, char Mapa[][40],
+  int PortaX, int PortaY, int NPCX, int EspinhoX, int EspinhoY, int EspinhoAtivar){
+    int X,Y;
+    
+    for(Y = 0; Y < Altura; Y++){
+		for(X = 0; X < Largura; X++){
+			Mapa[Y][X] = ' ';
+			
+			MapaGerador((*Fase), Mapa, PortaX, PortaY,
+            NPCX, EspinhoX, EspinhoY, EspinhoAtivar);
+			
+			if(Y == JogY && X == JogX){
+				Mapa[Y][X] = '&';
+			}
+			
+			if(((*Fase) > 2)){
+				
+			}
+			
+			if((*Fase) > 2){
+				if(Y == IY1 && X == IX1){
+					Mapa[Y][X] = 'X';
+				}
+				
+			}
+			
+			if((*Fase) > 4){
+				if(Y == IY2 && X ==IX2){
+					Mapa[Y][X] = 'V';
+				}
+			}
+		}
+	}
+	if((*Fase) == 1){
+		printf("\nPressione a tecla 'i'\n"
+		       "  para interagir\n\n");
+	}
+	for(Y = 0; Y < Altura; Y++){
+		for(X = 0; X < Largura; X++){
+			printf("%c",Mapa[Y][X]);
+		}
+		printf("\n");
+	}
+
+}
+
+void Finalizacao(int *Vida, int *NovaVida, int *Onda,
+int *JogoRodando, int Proxima, int *MudarMapa, int *Zerar){
+	if((*Vida) == 0){
+		system("cls");
+		printf("              Game Over Bobalhão\n\n");
+		printf("[PRESSIONE QUALQUER TECLA PARA VOLTAR AO MENU]\n");
+				getch();
+				Sleep(2000);
+				system("cls");		
+	}
+	if(Proxima == 1){
+		if((*Onda) == 1){(*Onda)++;}
+        else{(*Onda) *= 2;}
+        (*MudarMapa = 1);	
+	}
+	if((*Onda) > 8){
+		system("cls");
+		printf("     Você conseguiu escapar da dungeon!\n"
+		       "               ***Parabens***\n\n"
+			   "[PRESSIONE QUALQUER BOTÃO PARA VOLTAR AO MENU]\n");
+		getch();
+		Sleep(2000);
+		system("cls");	   
+	}
+    if((*Onda) > 8 || (*Vida) == 0){
+		(*JogoRodando) = 0;(*Onda) = 1;
+        (*MudarMapa) = 1;(*Zerar) = 1;
+	}
+}
+
+int main(){
+	
+	setlocale(LC_ALL, "portuguese");
+	char Comando, Mapa[40][40];
+	int JogX, JogY, PaX, PaY, IX1, IY1, IX2, IY2, NPCX = 6;
+	int MudarMapa, Proxima, Onda = 1, JogoRodando = 0, Menu = 1;
+	int Vida, NovaVida=0, Zerar;
+	int i;
+	int PortaX, PortaY, EspinhoX, EspinhoY,EspinhoAtivar;
+	while(Menu == 1){
+		TelaInicial(&JogoRodando,&Menu);
+		Vida = 3;
+		Zerar = 0;
+	while(JogoRodando == 1){
+		Proxima = 0;
+		JogX = 5; JogY = 5;
+		if(Onda == 2){JogX = 6; JogY = 8;}
+		if(Onda == 4){JogX = 1; JogY = 2;}
+		if(Onda == 8){JogX = 9; JogY = 1;}			
+		IX1 = 10; IY1 =  8;
+		IX2 = 32; IY2 = 21;
+		PortaX = 5; PortaY = 6; EspinhoX = 3; EspinhoY = 4;EspinhoAtivar = 0;
+		if(MudarMapa == 1){NPCX = 6;}	
+		Fase(&Onda, &PaX, &PaY);
+		MudarMapa = 0;
+		
+		while(MudarMapa == 0){
+		Sleep(30);
+			if(kbhit()){
+			Comando = getch();
+            Jogador(Comando, &JogX, &JogY, PaX, PaY, Mapa, 
+			&PortaX, &PortaY, &Proxima, &NPCX, &EspinhoX, &EspinhoY,&EspinhoAtivar);
+			}
+			NovaVida = Vida;
+  	          i++;
+            if(i%2==0){
+   	        Inimigos(Onda, &IX1, &IY1, &IX2, &IY2, JogX, JogY, PaX, PaY, Mapa);}
+	 	    Colisao(&Vida, JogX, JogY, IX1, IY1, IX2, IY2, Mapa);
+	 	    Finalizacao(&Vida, &NovaVida, &Onda, &JogoRodando, Proxima, &MudarMapa, &Zerar);
+	    	if(NovaVida > Vida || Vida == 0 || Zerar == 1){break;}
+    	 	system("cls");   	 
+			printf("Vidas: %d/%d\n",Vida,3);
+		    Jogo(PaY, PaX, IX1, IY1, IX2, IY2, JogX, JogY, 
+			&Onda, Mapa, PortaX, PortaY, NPCX, EspinhoX, EspinhoY,EspinhoAtivar);
+		}	
+	}
+	}
+	
+	return 0;
+}
